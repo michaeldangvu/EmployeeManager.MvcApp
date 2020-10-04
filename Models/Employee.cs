@@ -15,6 +15,7 @@ namespace EmployeeManager.Mvc.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required(ErrorMessage = "Employee ID is required")]
         [Display(Name = "Employee ID")]
+        // the above is using data annotations rather than built-in conventions like Country.cs
         public int EmployeeID { get; set; }
 
         [Column("FirstName")]

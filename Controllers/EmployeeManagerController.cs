@@ -37,6 +37,65 @@ namespace EmployeeManager.Mvc.Controllers
             return View(model);
         }
 
+        public IActionResult Insert()
+        {
+            FillCountries();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Insert(Employee model)
+        {
+            FillCountries();// why do we need to call it again?
+            if (ModelState.IsValid)
+            {
+                db.Employees.Add(model);
+                db.SaveChanges();
+                ViewBag.Message = "Employee inserted successfully";
+            }
+            return View(model); 
+            // why not return View();
+        }
+
+        public IActionResult Update(int id)
+        {// when user clicks the Update button in the Employee list
+            FillCountries();
+            Employee model = db.Employees.Find(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Update(Employee model)
+        {// when user clicks the Save button in the Employee form 
+            FillCountries();
+            if (ModelState.IsValid)
+            {
+                db.Employees.Update(model);
+                db.SaveChanges();
+                ViewBag.Message = "Employee updated successfully";
+            }
+            return View(model);
+        }
+
+        [ActionName("Delete")]// bottom of p.94 to see what this means??
+        public IActionResult ConfirmDelete(int id)
+        {
+            Employee model = db.Employees.Find(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int employeeID)
+        //receives EmployeeID from the confirmation page through model binding, 
+        //must be the same as the property name being model bound?
+        {
+            Employee model = db.Employees.Find(employeeID);
+            db.Employees.Remove(model);
+            db.SaveChanges();
+            TempData["Message"] = "Employee deleted successfully";
+            return RedirectToAction("List");
+        }
+
         public IActionResult Index()
         {
             return View();
